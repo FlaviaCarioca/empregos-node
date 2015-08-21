@@ -4,26 +4,29 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var timezone = require('moment-timezone');
+var config = require('./config'); // get the config file
 
 var users = require('./routes/api/v1/users');
 var candidates = require('./routes/api/v1/candidates');
 
 var app = express();
 
-var conString = process.env.DATABASE_URL || 'postgres://fgoncalves:pafu2ncia@localhost:5432/emprego_development';
-app.set('dbConnectionString', conString);
+app.set('dbConnectionString', config.database);
+app.set('superSecret', config.secret);
 
 /* Constants */
 app.set('Candidate', 'Candidate');
 
-app.use(logger('dev'));
+app.use(logger('dev')); // use morgan to log requests to the console
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 /* USER Routes */
 app.post('/api/v1/users', users.create);
+app.post('/api/v1/auth', users.authenticate);
 
 /* CANDIDATE Routes */
 app.post('/api/v1/candidate', candidates.update);

@@ -1,10 +1,10 @@
 var pgp = require('pg-promise')(); // postgres promises integration
 var q = require('q');
 var moment = require('moment');
+var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
 
 exports.create = function(req, res, next){
-  // Create a client
-  var dbClient = pgp(req.app.get('dbConnectionString'));
+  var dbClient = pgp(req.app.get('dbConnectionString')); // Create a client
 
   if(req.body.profile_type.toUpperCase() == req.app.get('Candidate').toUpperCase()){
     // Create a candidate profile
@@ -21,10 +21,6 @@ exports.create = function(req, res, next){
                  .then(function(data){
                    res.status(201).json({ candidate_id: data.id });
                 })
-                .catch(function(error) {
-                  console.log('Error running candidate-user transaction', error);
-                  res.status(422).json({ 'error': 'Something went wrong. Please try again later' });
-                });
               })
               .catch(function(error){
                  console.log('Error running candidate-user transaction', error);
@@ -32,4 +28,26 @@ exports.create = function(req, res, next){
               });
     });
   }
+}
+
+// Authenticates the user and returns a token
+exports.authenticate = function(req, res, next){
+  var dbClient = pgp(req.app.get('dbConnectionString')); // Create a client
+
+  var authQuery = "SELECT u.id, u.profile_type FROM users u " +
+                  "WHERE email = $1 and password = $2";
+
+  dbClient.query(authQuery, [req.body.email, req.body.password])
+    .then(function(data){
+      payload = { user_id: data[0].id };
+
+      // Creates the token
+      var token = jwt.sign(payload, req.app.get('superSecret'), { expiresInMinutes: 1440 }); // expires in 24 hours
+
+      // return the information including token as JSON
+      res.status(200).json({ auth_token: token, user_type: data[0].profile_type });
+    })
+    .catch(function(error){
+      res.status(401).json({ error: 'Invalid username or password' });
+    });
 }
