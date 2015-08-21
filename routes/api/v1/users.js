@@ -3,11 +3,8 @@ var q = require('q');
 var moment = require('moment');
 
 exports.create = function(req, res, next){
-  // Get the connection string
-  var connectionString = req.app.get('dbConnectionString');
-
   // Create a client
-  var dbClient = pgp(connectionString);
+  var dbClient = pgp(req.app.get('dbConnectionString'));
 
   if(req.body.profile_type.toUpperCase() == req.app.get('Candidate').toUpperCase()){
     // Create a candidate profile

@@ -6,16 +6,16 @@ var bodyParser = require('body-parser');
 var timezone = require('moment-timezone');
 
 var users = require('./routes/api/v1/users');
+var candidates = require('./routes/api/v1/candidates');
 
 var app = express();
 
 var conString = process.env.DATABASE_URL || 'postgres://fgoncalves:pafu2ncia@localhost:5432/emprego_development';
 app.set('dbConnectionString', conString);
 
+/* Constants */
 app.set('Candidate', 'Candidate');
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -24,6 +24,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 /* USER Routes */
 app.post('/api/v1/users', users.create);
+
+/* CANDIDATE Routes */
+app.post('/api/v1/candidate', candidates.update);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
