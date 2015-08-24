@@ -16,7 +16,6 @@ module.exports = {
 						error: 'Failed to authenticate the token.'
 					});
 				} else {
-
 					if (req.user != decoded['user_id']) {
 						// Check if the user is authorized to access the route
 						var dbClient = pgp(req.app.get('dbConnectionString'));
@@ -41,9 +40,7 @@ module.exports = {
 			});
 		} else {
 			// If there is no token return an error
-			return res.status(403).json({
-				error: 'No token provided.'
-			});
+			return res.status(403).json({ error: 'No token provided.' });
 		}
 	}
 };

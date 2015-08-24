@@ -1,11 +1,11 @@
 var express = require('express');
 var path = require('path');
 var logger = require('morgan');
-var cookieParser = require('cookie-parser');
+//var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var timezone = require('moment-timezone');
-var config = require('./config'); // get the config file
-var auth = require('./auth');
+var config = require('./config'); // Get the config file
+var auth = require('./auth'); // Secure routes
 
 var users = require('./routes/api/v1/users');
 var candidates = require('./routes/api/v1/candidates');
@@ -18,30 +18,23 @@ app.set('superSecret', config.secret);
 /* Constants */
 app.set('Candidate', 'Candidate');
 
-app.use(logger('dev')); // use morgan to log requests to the console
+app.use(logger('dev')); // Ise morgan to log requests to the console
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-	extended: true
-}));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(bodyParser.urlencoded({ extended: true }));
+//app.use(cookieParser());
 
 /* USER Routes - These don't require a token */
 app.post('/api/v1/auth', users.authenticate);
+app.post('/api/v1/users', users.create);
 
-
-// Route middleware to verify the token
+// Route middleware to verify the token and secure routes
 // This is added after the authenticate route because that on won't
 // have a token. ORDER IS IMPORTANT HERE!!!!!!!
 // The routes placed after this middleware will HAVE TO HAVE a token.
 app.use(auth.authVerification);
 
-app.post('/api/v1/users', users.create);
 /* CANDIDATE Routes */
 app.post('/api/v1/candidate', candidates.update);
-
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

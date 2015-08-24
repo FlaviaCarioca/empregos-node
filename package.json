@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "supervisor ./bin/www"
+    "start": "supervisor ./bin/www",
+    "test": "node_modules/.bin/mocha -b -t 10000"
   },
   "dependencies": {
     "body-parser": "~1.12.4",
@@ -20,9 +21,9 @@
     "serve-favicon": "~2.3.0"
   },
   "devDependencies": {
-    "chai": "^3.2.0",
-    "mocha": "^2.2.5",
-    "supertest": "^1.0.1",
+    "chai": "~3.2.0",
+    "mocha": "~2.2.5",
+    "supertest": "~1.0.1",
     "supervisor": "~0.7.1"
   }
 }
