@@ -1,10 +1,10 @@
 {
   "name": "empregos-express",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "start": "supervisor ./bin/www",
-    "test": "node_modules/.bin/mocha -b -t 10000"
+    "test": "mocha -b -t 10000"
   },
   "dependencies": {
     "body-parser": "~1.12.4",
@@ -25,5 +25,23 @@
     "mocha": "~2.2.5",
     "supertest": "~1.0.1",
     "supervisor": "~0.7.1"
-  }
+  },
+  "main": "app.js",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FlaviaCarioca/empregos-node.git"
+  },
+  "keywords": [
+    "node",
+    "api"
+  ],
+  "author": "Flavia Goncalves",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/FlaviaCarioca/empregos-node/issues"
+  },
+  "homepage": "https://github.com/FlaviaCarioca/empregos-node"
 }
