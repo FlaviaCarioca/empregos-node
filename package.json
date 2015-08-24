@@ -20,6 +20,9 @@
     "serve-favicon": "~2.3.0"
   },
   "devDependencies": {
+    "chai": "^3.2.0",
+    "mocha": "^2.2.5",
+    "supertest": "^1.0.1",
     "supervisor": "~0.7.1"
   }
 }
