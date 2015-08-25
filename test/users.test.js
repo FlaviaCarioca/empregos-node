@@ -7,15 +7,15 @@ var url = 'http://localhost:3000';
 supertest = supertest.bind(supertest, url);
 
 describe('User Routes', function(){
-  beforeEach(function(){
-    nock.cleanAll();
-  });
+  // beforeEach(function(){
+  //   nock.cleanAll();
+  // });
 
   describe('authenticate', function(){
     it('should return a token when the user is authenticated', function(done){
       var user = { email: faker.internet.email(), password: faker.internet.password() };
       var expectedProfiletype = 'Candidate';
-      var response = { 'auth_token': 'sdfasdfadsg.tywrywrywreywery.hjkghjkghjkghjk', user_type: 'Candidate' }
+      var response = { 'auth_token': 'sdfasdfadsg.tywrywrywreywery.hjkghjkghjkghjk', user_type: 'Candidate' };
 
       var api = nock(url)
                 .post('/api/v1/auth', user)
@@ -46,7 +46,7 @@ describe('User Routes', function(){
 
       var api = nock(url)
                 .post('/api/v1/auth')
-                .reply(401, { error: 'Invalid username or password' })
+                .reply(401, { error: 'Invalid username or password' });
 
       supertest(app)
         .post('/api/v1/auth')
@@ -61,7 +61,7 @@ describe('User Routes', function(){
           }
 
           expect(res.body["error"]).to.equal('Invalid username or password');
-
+          api.done();
           done();
         })
     });
@@ -75,7 +75,7 @@ describe('User Routes', function(){
 
       var api = nock(url)
                 .post('/api/v1/users')
-                .reply(201, response)
+                .reply(201, response);
 
       supertest(app)
         .post('/api/v1/users')
@@ -89,8 +89,9 @@ describe('User Routes', function(){
             throw error;
           }
 
+          //expect(res.body).to.exist;
           expect(res.body).to.eql(response);
-
+          api.done();
           done();
         });
     });

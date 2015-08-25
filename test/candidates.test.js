@@ -43,6 +43,10 @@ describe('Candidates Routes', function(){
 
           done();
         });
-    })
+    });
+
+    // it('returns an error if it cannot update the candidate profile', function(done){
+    //
+    // });
   });
 });
