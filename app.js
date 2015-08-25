@@ -5,7 +5,7 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 var timezone = require('moment-timezone');
 var config = require('./config'); // Get the config file
-var auth = require('./auth'); // Secure routes
+var auth = require('./lib/auth'); // Secure routes
 
 var users = require('./routes/api/v1/users');
 var candidates = require('./routes/api/v1/candidates');
@@ -14,6 +14,7 @@ var app = express();
 
 app.set('dbConnectionString', config.database);
 app.set('superSecret', config.secret);
+app.disable('x-powered-by'); // Nobody needs to know this is an express app
 
 /* Constants */
 app.set('Candidate', 'Candidate');
@@ -21,6 +22,7 @@ app.set('Candidate', 'Candidate');
 app.use(logger('dev')); // Ise morgan to log requests to the console
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 //app.use(cookieParser());
 
 /* USER Routes - These don't require a token */

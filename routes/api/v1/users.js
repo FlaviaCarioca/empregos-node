@@ -15,17 +15,17 @@ exports.create = function(req, res, next){
 
     dbClient.tx(function (t) {
       date = moment().format();
-      return t.one(candidateQueryString, [req.body.first_name, req.body.last_name, date, date])
-              .then(function(data) {
-                t.one(userQueryString, [req.body.email, req.body.password, data.id, req.body.profile_type, date, date])
-                 .then(function(data){
-                   res.status(201).json({ candidate_id: data.id });
-                })
-              })
-              .catch(function(error){
-                 console.log('Error running candidate-user transaction', error);
-                 res.status(422).json({ 'error': 'Something went wrong. Please try again later' });
-              });
+      t.one(candidateQueryString, [req.body.first_name, req.body.last_name, date, date])
+        .then(function(data) {
+          t.one(userQueryString, [req.body.email, req.body.password, data.id, req.body.profile_type, date, date])
+           .then(function(data){
+             res.status(201).json({ candidate_id: data.id });
+          })
+        })
+        .catch(function(error){
+           console.log('Error running candidate-user transaction', error);
+           res.status(422).json({ 'error': 'Something went wrong. Please try again later' });
+        });
     });
   }
 }
