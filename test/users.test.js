@@ -13,7 +13,7 @@ describe('User Routes', function(){
 
   describe('authenticate', function(){
     it('should return a token when the user is authenticated', function(done){
-      var user = { email: faker.internet.email, password: faker.internet.password() };
+      var user = { email: faker.internet.email(), password: faker.internet.password() };
       var expectedProfiletype = 'Candidate';
       var response = { 'auth_token': 'sdfasdfadsg.tywrywrywreywery.hjkghjkghjkghjk', user_type: 'Candidate' }
 
@@ -42,12 +42,12 @@ describe('User Routes', function(){
     });
 
     it('should return an error if the user cannot be authenticated', function(done){
-      var user = { email: faker.internet.email, password: faker.internet.password() };
+      var user = { email: faker.internet.email(), password: faker.internet.password() };
 
       var api = nock(url)
                 .post('/api/v1/auth')
                 .reply(401, { error: 'Invalid username or password' })
-console.log(user);
+
       supertest(app)
         .post('/api/v1/auth')
         .send(user)
