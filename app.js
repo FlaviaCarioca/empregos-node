@@ -36,7 +36,7 @@ app.post('/api/v1/users', users.create);
 app.use(auth.authVerification);
 
 /* CANDIDATE Routes */
-app.post('/api/v1/candidate', candidates.update);
+app.put('/api/v1/candidate', candidates.update);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
