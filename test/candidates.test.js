@@ -7,24 +7,26 @@ var url = "http://localhost:3000";
 supertest = supertest.bind(supertest, url);
 
 describe('Candidates Routes', function(){
+  before(function(){
+    return candidate = {
+        'address': faker.address.streetAddress(),
+        'city':  faker.address.city(),
+        'state': faker.address.stateAbbr(),
+        'zip': faker.address.zipCode(),
+        'title': 'Software Engineer',
+        'description': faker.lorem.paragraph(2),
+        'minimum_salary': faker.random.number({ min: 200000, max: 999999 }),
+        'linkedin': faker.internet.url(),
+        'github': faker.internet.url(),
+        'is_active': true,
+        'can_relocate': false,
+        'can_remote': true,
+        'is_visa_needed': false
+      }
+  });
+
   describe('Update', function(){
     it('Updates a candidate profile', function(done){
-      var candidate = {
-          'address': faker.address.streetAddress(),
-          'city':  faker.address.city(),
-          'state': faker.address.stateAbbr(),
-          'zip': faker.address.zipCode(),
-          'title': 'Software Engineer',
-          'description': faker.lorem.paragraph(2),
-          'minimum_salary': faker.random.number({ min: 200000, max: 999999 }),
-          'linkedin': faker.internet.url(),
-          'github': faker.internet.url(),
-          'is_active': true,
-          'can_relocate': false,
-          'can_remote': true,
-          'is_visa_needed': false
-        }
-
       var api = nock(url)
                 .put('/api/v1/candidate')
                 .reply(200);
@@ -38,15 +40,27 @@ describe('Candidates Routes', function(){
             console.log(error);
             throw error;
           }
-
-          expect(res.status).to.equal(200);
-
           done();
         });
     });
 
-    // it('returns an error if it cannot update the candidate profile', function(done){
-    //
-    // });
+    it('returns an error if it cannot update the candidate profile', function(done){
+      var api = nock(url)
+                .put('/api/v1/candidate')
+                .reply(422,{ error: 'Something went wrong. Please try again later' });
+
+      supertest(app)
+        .put('/api/v1/candidate')
+        .send(candidate)
+        .expect(422)
+        .end(function(error, res){
+          if(error){
+            throw error;
+          }
+
+          expect(res.body['error']).to.equal('Something went wrong. Please try again later');
+          done();
+        });
+    });
   });
 });

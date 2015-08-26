@@ -29,7 +29,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.post('/api/v1/auth', users.authenticate);
 app.post('/api/v1/users', users.create);
 
-
 // Route middleware to verify the token and secure routes
 // This is added after the authenticate route because that on won't
 // have a token. ORDER IS IMPORTANT HERE!!!!!!!

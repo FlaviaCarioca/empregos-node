@@ -16,13 +16,12 @@ exports.update = function(req, res, next){
                                 req.body.description, req.body.minimum_salary, req.body.linkedin, req.body.github,
                                 req.body.is_active, req.body.can_relocate, req.body.can_remote, req.body.is_visa_needed,
                                 req.body.specialization_id, req.body.company_size_id, req.body.job_type_id, date, date,
-                                req.user.profile_id]
-               )
-              .then(function(){
-                res.status(200).end();
-              })
-              .catch(function(error){
-                console.log(error);
-                res.status(422).json({ error: 'Something went wrong. Please try again later' });
-              });
-}
+                                req.user.profile_id])
+                .then(function(){
+                  res.status(200).end();
+                })
+                .catch(function(error){
+                  console.log(error);
+                  res.status(422).json({ error: 'Something went wrong. Please try again later' });
+                });
+};
