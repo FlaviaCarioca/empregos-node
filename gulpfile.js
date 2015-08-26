@@ -2,6 +2,8 @@ var gulp = require('gulp');
 var supervisor = require('gulp-supervisor');
 var mocha = require('gulp-mocha');
 var istanbul = require('gulp-istanbul');
+var jshint = require('gulp-jshint');
+var stylish = require('jshint-stylish');
 var env = require('gulp-env');
 
 gulp.task('supervisor', function() {
@@ -12,14 +14,6 @@ gulp.task('supervisor', function() {
     }
   });
   return supervisor("./bin/www");
-});
-
-
-gulp.task('watch', function(){
-  gulp.watch(
-    ['app.js', 'test/*.js'],
-    ['mocha']
-  );
 });
 
 gulp.task('mocha', function() {
@@ -40,6 +34,13 @@ gulp.task('mocha', function() {
     });
 });
 
-gulp.task('default', ['supervisor', 'watch']);
+// JSHint
+gulp.task('scripts', function () {
+  return gulp.src(['./routes/**/*.js'])
+    .pipe(jshint())
+    .pipe(jshint.reporter(stylish))
+});
+
+gulp.task('default', ['supervisor', 'scripts']);
 
 gulp.task('test', ['mocha']);
