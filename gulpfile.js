@@ -1,19 +1,38 @@
 var gulp = require('gulp');
-var supervisor = require('gulp-supervisor');
+var nodemon = require('gulp-nodemon');
 var mocha = require('gulp-mocha');
 var istanbul = require('gulp-istanbul');
 var jshint = require('gulp-jshint');
 var stylish = require('jshint-stylish');
 var env = require('gulp-env');
 
-gulp.task('supervisor', function() {
-  env({
-    vars: {
-      NODE_ENV: 'development',
-      PORT: 3000
+// Watch Files For Changes
+gulp.task('watch', function () {
+  gulp.watch('./routes/**/*.js', ['lint']);
+});
+
+// JSHint
+gulp.task('lint', function () {
+  return gulp.src('./routes/**/*.js')
+    .pipe(jshint())
+    .pipe(jshint.reporter(stylish));
+});
+
+// Re-start after changes
+gulp.task('nodemon', function () {
+  nodemon({
+    script: 'app.js',
+    ext: 'js',
+    env: {
+      'NODE_ENV': 'development',
+      'PORT': 3000
     }
-  });
-  return supervisor("./bin/www");
+  })
+    .on('start', ['watch'])
+    .on('change', ['watch'])
+    .on('restart', function () {
+      console.log('restarted!');
+    });
 });
 
 gulp.task('mocha', function() {
@@ -34,13 +53,6 @@ gulp.task('mocha', function() {
     });
 });
 
-// JSHint
-gulp.task('scripts', function () {
-  return gulp.src(['./routes/**/*.js'])
-    .pipe(jshint())
-    .pipe(jshint.reporter(stylish))
-});
-
-gulp.task('default', ['supervisor', 'scripts']);
+gulp.task('default', ['nodemon']);
 
 gulp.task('test', ['mocha']);

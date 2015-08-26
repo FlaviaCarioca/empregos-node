@@ -20,7 +20,7 @@ exports.create = function(req, res, next){
           t.one(userQueryString, [req.body.email, req.body.password, data.id, req.body.profile_type, date, date])
            .then(function(data){
              res.status(201).json({ candidate_id: data.id });
-          })
+          });
         })
         .catch(function(error){
            console.log('Error running candidate-user transaction', error);
@@ -28,7 +28,7 @@ exports.create = function(req, res, next){
         });
     });
   }
-}
+};
 
 // Authenticates the user and returns a token
 exports.authenticate = function(req, res, next){
@@ -50,4 +50,4 @@ exports.authenticate = function(req, res, next){
     .catch(function(error){
       res.status(401).json({ error: 'Invalid username or password' });
     });
-}
+};
