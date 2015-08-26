@@ -7,9 +7,9 @@ var url = 'http://localhost:3000';
 supertest = supertest.bind(supertest, url);
 
 describe('User Routes', function(){
-  // beforeEach(function(){
-  //   nock.cleanAll();
-  // });
+  beforeEach(function(){
+    nock.cleanAll();
+  });
 
   describe('authenticate', function(){
     it('should return a token when the user is authenticated', function(done){
@@ -33,6 +33,7 @@ describe('User Routes', function(){
             throw err;
           }
 
+          api.done();
           expect(res.body['auth_token']).to.exist;
           expect(res.body['user_type']).to.equal(expectedProfiletype);
 
@@ -60,8 +61,10 @@ describe('User Routes', function(){
             throw error;
           }
 
-          expect(res.body["error"]).to.equal('Invalid username or password');
           api.done();
+
+          expect(res.body["error"]).to.equal('Invalid username or password');
+
           done();
         })
     });
@@ -89,9 +92,10 @@ describe('User Routes', function(){
             throw error;
           }
 
+          api.done();
           //expect(res.body).to.exist;
           expect(res.body).to.eql(response);
-          api.done();
+
           done();
         });
     });
