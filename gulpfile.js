@@ -25,6 +25,7 @@ gulp.task('nodemon', function () {
     ext: 'js',
     env: {
       'NODE_ENV': 'development',
+      'SERVER': '127.0.0.1',
       'PORT': 3000
     }
   })

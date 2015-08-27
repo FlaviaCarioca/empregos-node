@@ -12,11 +12,12 @@ exports.update = function(req, res, next){
 
   var date = moment().format();
 
-  dbClient.none(candidateQuery, [req.body.address, req.body.city, req.body.state, req.body.zip, req.body.title,
-                                req.body.description, req.body.minimum_salary, req.body.linkedin, req.body.github,
-                                req.body.is_active, req.body.can_relocate, req.body.can_remote, req.body.is_visa_needed,
-                                req.body.specialization_id, req.body.company_size_id, req.body.job_type_id, date, date,
-                                req.user.profile_id])
+  dbClient.none(candidateQuery, [req.body.candidate.address, req.body.candidate.city, req.body.candidate.state,
+                                 req.body.candidate.zip, req.body.candidate.title,
+                                 req.body.candidate.description, req.body.candidate.minimum_salary, req.body.candidate.linkedin, req.body.candidate.github,
+                                 req.body.candidate.is_active, req.body.candidate.can_relocate, req.body.candidate.can_remote, req.body.candidate.is_visa_needed,
+                                 req.body.candidate.specialization_id, req.body.candidate.company_size_id, req.body.candidate.job_type_id, date, date,
+                                 req.user.profile_id])
                 .then(function(){
                   res.status(200).end();
                 })

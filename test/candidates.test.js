@@ -24,18 +24,18 @@ describe('Candidates Routes', function(){
         'is_visa_needed': false
       };
 
-      //return candidate;
+      return candidate;
   });
 
   describe('Update', function(){
     it('Updates a candidate profile', function(done){
       var api = nock(url)
-                .put('/api/v1/candidate')
+                .put('/v1/candidate')
                 .reply(200);
 
       supertest(app)
-        .put('/api/v1/candidate')
-        .send(candidate)
+        .put('/v1/candidate')
+        .send({ candidate: candidate })
         .expect(200)
         .end(function(error, res){
           if(error){
@@ -48,12 +48,12 @@ describe('Candidates Routes', function(){
 
     it('returns an error if it cannot update the candidate profile', function(done){
       var api = nock(url)
-                .put('/api/v1/candidate')
+                .put('/v1/candidate')
                 .reply(422,{ error: 'Something went wrong. Please try again later' });
 
       supertest(app)
-        .put('/api/v1/candidate')
-        .send(candidate)
+        .put('/v1/candidate')
+        .send({candidate: candidate})
         .expect(422)
         .end(function(error, res){
           if(error){

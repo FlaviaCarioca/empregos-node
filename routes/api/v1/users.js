@@ -36,8 +36,9 @@ exports.authenticate = function(req, res, next){
 
   var authQuery = "SELECT u.id, u.profile_type FROM users u " +
                   "WHERE email = $1 and password = $2";
-
-  dbClient.query(authQuery, [req.body.email, req.body.password])
+// console.log(req.body.email, req.body.password);
+// console.log(authQuery);
+  dbClient.query(authQuery, [req.body.auth.username, req.body.auth.password])
     .then(function(data){
       payload = { user_id: data[0].id };
 
@@ -48,6 +49,6 @@ exports.authenticate = function(req, res, next){
       res.status(200).json({ auth_token: token, user_type: data[0].profile_type });
     })
     .catch(function(error){
-      res.status(401).json({ error: 'Invalid username or password' });
+      res.status(401).json({ error: 'Invalid username or passwordssssss' });
     });
 };
