@@ -6,6 +6,7 @@ var faker = require('faker');
 var url = 'http://localhost:3000';
 supertest = supertest.bind(supertest, url);
 
+
 describe('User Routes', function(){
   beforeEach(function(){
     nock.cleanAll();
@@ -16,11 +17,21 @@ describe('User Routes', function(){
       var user = { email: faker.internet.email(), password: faker.internet.password() };
       var expectedProfiletype = 'Candidate';
       var response = { 'auth_token': 'sdfasdfadsg.tywrywrywreywery.hjkghjkghjkghjk', user_type: 'Candidate' };
-
+      //
       var api = nock(url)
                 .post('/api/v1/auth', user)
                 .reply(200, response);
 
+      // request({ method: 'POST',
+      //           uri: url + '/api/v1/auth',
+      //           json: true,
+      //           body: user },
+      //           function (error, response, body) {console.log(error);
+      //             expect(response.body.auth_token).not.to.exist;
+      //             //expect(response.body.user_type).to.equal(expectedProfiletype);
+      //               done();
+      //           }
+      //         );
       supertest(app)
         .post('/api/v1/auth')
         .send(user)
@@ -34,9 +45,8 @@ describe('User Routes', function(){
           }
 
           api.done();
-          expect(res.body['auth_token']).to.exist;
-          expect(res.body['user_type']).to.equal(expectedProfiletype);
-
+          expect(res.body.auth_token).to.exist;
+          expect(res.body.user_type).to.equal(expectedProfiletype);
           done();
         });
 
@@ -63,10 +73,10 @@ describe('User Routes', function(){
 
           api.done();
 
-          expect(res.body["error"]).to.equal('Invalid username or password');
+          expect(res.body.error).to.equal('Invalid username or password');
 
           done();
-        })
+        });
     });
   });
 
@@ -93,7 +103,7 @@ describe('User Routes', function(){
           }
 
           api.done();
-          //expect(res.body).to.exist;
+          // expect(res.body).to.exist;
           expect(res.body).to.eql(response);
 
           done();

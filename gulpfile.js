@@ -8,12 +8,12 @@ var env = require('gulp-env');
 
 // Watch Files For Changes
 gulp.task('watch', function () {
-  gulp.watch('./routes/**/*.js', ['lint']);
+  gulp.watch(['./routes/**/*.js', './test**/*.js'], ['lint']);
 });
 
 // JSHint
 gulp.task('lint', function () {
-  return gulp.src('./routes/**/*.js')
+  return gulp.src(['./routes/**/*.js', './test**/*.js'])
     .pipe(jshint())
     .pipe(jshint.reporter(stylish));
 });
@@ -28,18 +28,15 @@ gulp.task('nodemon', function () {
       'PORT': 3000
     }
   })
-    .on('start', ['watch'])
-    .on('change', ['watch'])
-    .on('restart', function () {
-      console.log('restarted!');
-    });
+    .on('start', ['watch']);
+    //.on('change', ['watch']);
 });
 
 gulp.task('mocha', function() {
   env({
     vars: {
       NODE_ENV: 'testing',
-      PORT: 3001
+      PORT: 3000
     }
   });
   return gulp.src(['./routes/**/*.js', 'app.js'])

@@ -22,7 +22,9 @@ describe('Candidates Routes', function(){
         'can_relocate': false,
         'can_remote': true,
         'is_visa_needed': false
-      }
+      };
+
+      //return candidate;
   });
 
   describe('Update', function(){
@@ -58,7 +60,7 @@ describe('Candidates Routes', function(){
             throw error;
           }
 
-          expect(res.body['error']).to.equal('Something went wrong. Please try again later');
+          expect(res.body.error).to.equal('Something went wrong. Please try again later');
           done();
         });
     });
