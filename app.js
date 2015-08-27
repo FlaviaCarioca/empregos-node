@@ -25,15 +25,17 @@ app.use(logger('dev')); // Ise morgan to log requests to the console
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+authVerification = auth.authVerification;
+
 /* USER Routes - These don't require a token */
 app.post('/v1/auth', users.authenticate);
 app.post('/v1/users', users.create);
 
-// Route middleware to verify the token and secure routes
-// This is added after the authenticate route because that on won't
-// have a token. ORDER IS IMPORTANT HERE!!!!!!!
-// The routes placed after this middleware will HAVE TO HAVE a token.
-authVerification = auth.authVerification;
+// // Route middleware to verify the token and secure routes
+// // This is added after the authenticate route because that on won't
+// // have a token. ORDER IS IMPORTANT HERE!!!!!!!
+// // The routes placed after this middleware will HAVE TO HAVE a token.
+// authVerification = auth.authVerification;
 
 /* CANDIDATE Routes */
 app.put('/v1/candidate', authVerification, candidates.update);

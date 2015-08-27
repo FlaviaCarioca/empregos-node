@@ -6,7 +6,7 @@ var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
 exports.create = function(req, res, next){
   var dbClient = pgp(req.app.get('dbConnectionString')); // Create a client
 
-  if(req.body.profile_type.toUpperCase() == req.app.get('Candidate').toUpperCase()){
+  if(req.body.user.user_type.toUpperCase() == req.app.get('Candidate').toUpperCase()){
     // Create a candidate profile
     var candidateQueryString = "INSERT INTO candidates(first_name, last_name, created_at, updated_at) values ($1, $2, $3, $4) returning id";
 
@@ -15,13 +15,13 @@ exports.create = function(req, res, next){
 
     dbClient.tx(function (t) {
       date = moment().format();
-      t.one(candidateQueryString, [req.body.first_name, req.body.last_name, date, date])
-        .then(function(data) {
-          t.one(userQueryString, [req.body.email, req.body.password, data.id, req.body.profile_type, date, date])
-           .then(function(data){
-             res.status(201).json({ candidate_id: data.id });
-          });
+        return t.one(candidateQueryString, [req.body.user.first_name, req.body.user.last_name, date, date])
+          .then(function(data) {
+             return t.one(userQueryString, [req.body.user.email, req.body.user.password, data.id, req.body.user.user_type, date, date])
         })
+        .then(function(data){
+            res.status(201).json({ candidate_id: data.id });
+         })
         .catch(function(error){
            console.log('Error running candidate-user transaction', error);
            res.status(422).json({ 'error': 'Something went wrong. Please try again later' });
