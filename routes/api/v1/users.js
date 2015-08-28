@@ -45,10 +45,14 @@ exports.authenticate = function(req, res, next){
       // Creates the token
       var token = jwt.sign(payload, req.app.get('superSecret'), { expiresInMinutes: 1440 }); // expires in 24 hours
 
-      // return the information including token as JSON
-      res.status(200).json({ auth_token: token, user_type: data[0].profile_type });
+      if(token){
+        // return the information including token as JSON
+        res.status(200).json({ auth_token: token, user_type: data[0].profile_type });
+      } else {
+        res.status(500).json({ 'error': 'Something went wrong. Please try again later' });
+      }
     })
     .catch(function(error){
-      res.status(401).json({ error: 'Invalid username or passwordssssss' });
+      res.status(401).json({ error: 'Invalid username or password' });
     });
 };
