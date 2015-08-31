@@ -3,7 +3,6 @@ var q = require('q');
 var moment = require('moment');
 
 exports.update = function(req, res, next){
-  console.log(req);
   var dbClient = pgp(req.app.get('dbConnectionString')); // Create a client
 
   var candidateQuery = "UPDATE candidates SET address=$1, city=$2, state=$3, zip=$4, title=$5, description=$6, " +

@@ -34,10 +34,7 @@ exports.create = function(req, res, next){
 exports.authenticate = function(req, res, next){
   var dbClient = pgp(req.app.get('dbConnectionString')); // Create a client
 
-  var authQuery = "SELECT u.id, u.profile_type FROM users u " +
-                  "WHERE email = $1 and password = $2";
-// console.log(req.body.email, req.body.password);
-// console.log(authQuery);
+  var authQuery = "SELECT u.id, u.profile_type FROM users u WHERE email = $1 and password = $2";
   dbClient.query(authQuery, [req.body.auth.username, req.body.auth.password])
     .then(function(data){
       payload = { user_id: data[0].id };
