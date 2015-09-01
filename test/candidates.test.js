@@ -1,18 +1,39 @@
 var expect = require('chai').expect;
 var supertest = require('supertest');
-var nock = require('nock');
 var app = require('../app');
 var faker = require('faker');
-var url = "http://localhost:3000";
-supertest = supertest.bind(supertest, url);
+var token = '';
 
 describe('Candidates Routes', function(){
+  beforeEach(function(done){
+    // login and get a token
+    var user = { auth: { username: 'f@g.com', password: 'password' } };
+
+    supertest(app)
+      .post('/v1/auth')
+      .send(user)
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .end(function(err, res){
+        if(err){
+          console.log(err);
+          throw err;
+        }
+
+        token = res.body.auth_token;
+        done();
+    });
+
+    return token;
+  });
+
   before(function(){
     return candidate = {
         'address': faker.address.streetAddress(),
         'city':  faker.address.city(),
         'state': faker.address.stateAbbr(),
-        'zip': faker.address.zipCode(),
+        'zip': (faker.address.zipCode()).substring(0,4),
         'title': 'Software Engineer',
         'description': faker.lorem.paragraph(2),
         'minimum_salary': faker.random.number({ min: 200000, max: 999999 }),
@@ -23,23 +44,19 @@ describe('Candidates Routes', function(){
         'can_remote': true,
         'is_visa_needed': false
       };
-
-      return candidate;
   });
 
   describe('Update', function(){
     it('Updates a candidate profile', function(done){
-      var api = nock(url)
-                .put('/v1/candidate')
-                .reply(200);
+      token =  'Bearer ' + token;
 
       supertest(app)
         .put('/v1/candidate')
+        .set('Authorization', token)
         .send({ candidate: candidate })
         .expect(200)
         .end(function(error, res){
           if(error){
-            console.log(error);
             throw error;
           }
           done();
@@ -47,12 +64,12 @@ describe('Candidates Routes', function(){
     });
 
     it('returns an error if it cannot update the candidate profile', function(done){
-      var api = nock(url)
-                .put('/v1/candidate')
-                .reply(422,{ error: 'Something went wrong. Please try again later' });
+      candidate.minimum_salary = 30000000
+      token =  'Bearer ' + token;
 
       supertest(app)
         .put('/v1/candidate')
+        .set('Authorization', token)
         .send({candidate: candidate})
         .expect(422)
         .end(function(error, res){

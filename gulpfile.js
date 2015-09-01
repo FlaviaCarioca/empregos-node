@@ -6,11 +6,6 @@ var jshint = require('gulp-jshint');
 var stylish = require('jshint-stylish');
 var env = require('gulp-env');
 
-// Watch Files For Changes
-gulp.task('watch', function () {
-  gulp.watch(['./routes/**/*.js', './test**/*.js'], ['lint']);
-});
-
 // JSHint
 gulp.task('lint', function () {
   return gulp.src(['./routes/**/*.js', './test**/*.js'])
@@ -18,36 +13,37 @@ gulp.task('lint', function () {
     .pipe(jshint.reporter(stylish));
 });
 
-// Re-start after changes
+// Watch Files For Changes and Re-start after changes
 gulp.task('nodemon', function () {
   nodemon({
-    script: 'app.js',
+    script: './bin/www',
+    watch: ['./routes/**/*.js', './test**/*.js'],
+    verbose: true,
     ext: 'js',
+    tasks: ['lint', 'mocha'],
     env: {
-      'NODE_ENV': 'development',
-      'SERVER': '127.0.0.1',
-      'PORT': 3000
+      'NODE_ENV': 'development'
     }
   })
-    .on('start', ['watch']);
-    //.on('change', ['watch']);
+  .on('restart', function() {
+        console.log('Restarted!');
+    });
 });
 
 gulp.task('mocha', function() {
   env({
-    vars: {
-      NODE_ENV: 'testing',
-      PORT: 3000
-    }
-  });
-  return gulp.src(['./routes/**/*.js', 'app.js'])
+     vars: {
+       NODE_ENV: 'test',
+       PORT: 3000
+     }
+   });
+  return gulp.src('./routes/**/*.js')
     .pipe(istanbul()) // Covering files
     .pipe(istanbul.hookRequire())
     .on('finish', function () {
-      gulp.src(['test/*.js'])
-        .pipe(mocha({ bail: false, reporter: "spec" }))
-        .pipe(istanbul.writeReports({ dir: './coverage', reporters: [ 'lcov' ], reportOpts: { dir: './coverage'} })); // Creating the reports after tests ran
-        //.pipe(istanbul.enforceThresholds({ thresholds: { global: 90 } })) // Enforce a coverage of at least 90%
+      gulp.src(['test/*.js'], { read: false })
+        .pipe(mocha({ reporter: "spec" }))
+        .pipe(istanbul.writeReports({ dir: './coverage', reporters: [ 'lcov' ], reportOpts: { dir: './coverage'} }));// Creating the reports after tests ran
     });
 });
 

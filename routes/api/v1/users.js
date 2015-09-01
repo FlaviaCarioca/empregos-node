@@ -17,7 +17,7 @@ exports.create = function(req, res, next){
       date = moment().format();
         return t.one(candidateQueryString, [req.body.user.first_name, req.body.user.last_name, date, date])
           .then(function(data) {
-             return t.one(userQueryString, [req.body.user.email, req.body.user.password, data.id, req.body.user.user_type, date, date])
+             return t.one(userQueryString, [req.body.user.email, req.body.user.password, data.id, req.body.user.user_type, date, date]);
         })
         .then(function(data){
             res.status(201).json({ candidate_id: data.id });
@@ -50,6 +50,6 @@ exports.authenticate = function(req, res, next){
       }
     })
     .catch(function(error){
-      res.status(401).json({ error: 'Invalid username or password' });
+          res.status(401).json({ error: 'Invalid username or password' });
     });
 };

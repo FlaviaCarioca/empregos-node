@@ -5,7 +5,8 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 var timezone = require('moment-timezone');
 var cors = require('cors');
-var config = require('./config'); // Get the config file
+//var config = require('./config'); // Get the config file
+var config = require('./config.json')[process.env.NODE_ENV];
 var auth = require('./lib/auth'); // Secure routes
 
 var users = require('./routes/api/v1/users');
