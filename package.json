@@ -32,8 +32,6 @@
     "gulp-nodemon": "~2.0.4",
     "jshint-stylish": "~2.0.1",
     "mocha": "~2.2.5",
-    "proxyquire": "~1.7.1",
-    "request": "~2.61.0",
     "sinon": "~1.16.1",
     "supertest": "~1.0.1"
   },
