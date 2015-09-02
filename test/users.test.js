@@ -1,6 +1,6 @@
 var expect = require('chai').expect;
 var supertest = require('supertest');
-//var jwt    = require('jsonwebtoken');
+var jwt    = require('jsonwebtoken');
 var sinon = require('sinon');
 var app = require('../app');
 var faker = require('faker');
@@ -8,7 +8,7 @@ var proxyquire = require('proxyquire').noCallThru();
 
 describe('User Routes', function(){
   describe('authenticate', function(){
-    it('should return a token when the user is authenticated', function(done){
+    xit('should return a token when the user is authenticated', function(done){
       var user = { auth: { username: 'f@g.com', password: 'password' } };
       var expectedProfiletype = 'Candidate';
 
@@ -31,7 +31,7 @@ describe('User Routes', function(){
 
     });
 
-    it('should return a 401 if the user cannot be authenticated', function(done){
+    xit('should return a 401 if the user cannot be authenticated', function(done){
       var user = { auth: { username: faker.internet.email(), password: faker.internet.password() }};
 
       supertest(app)
@@ -52,10 +52,12 @@ describe('User Routes', function(){
     });
 
 
-    xit('should return a 500 if something goes really wrong', function(done){
-          var user = { auth: { username: 'f@g.com', password: 'password' } };
+    it('should return a 500 if something goes really wrong', function(done){
+          var user = { auth: { username: 'f@g.com', password: 'pafuncia' } };
 
-          // sinon.stub(jwt, 'sign').returns(null);
+          sinon.stub(jwt, 'sign', function(payload, secret, exp) {
+            return null;
+          });
           // app = require('../app');
           // var jwtStub = {
           //  sign: function() {
@@ -63,11 +65,11 @@ describe('User Routes', function(){
           //  }
           // };
 
-          const fs = proxyquire('../routes/api/v1/users', { 'jwt': {
-            sign: function(payload, secret, exp) {
-              cb(null, 'huzzah');
-            }}
-          });
+          // const fs = proxyquire('../routes/api/v1/users', { 'jwt': {
+          //   sign: function(payload, secret, exp) {
+          //     cb(null, 'huzzah');
+          //   }}
+          // });
           //proxyquire('../routes/api/v1/users',  {'jwt': jwtStub});
           // var payload = { user_id: 3 };
           // var secret = app.get('superSecret');
@@ -99,7 +101,7 @@ describe('User Routes', function(){
   });
 
   describe('create', function(){
-    it('should create a user', function(done){
+    xit('should create a user', function(done){
       var user = { user: { email: 'test@test.com', password: 'testing', profile_id: 3, user_type: 'Candidate',
                   first_name: 'Ana', last_name: 'Banana' }};
 
