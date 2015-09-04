@@ -5,7 +5,6 @@ var logger = require('morgan');
 var bodyParser = require('body-parser');
 var timezone = require('moment-timezone');
 var cors = require('cors');
-//var config = require('./config'); // Get the config file
 var config = require('./config.json')[process.env.NODE_ENV];
 var auth = require('./lib/auth'); // Secure routes
 
@@ -22,7 +21,9 @@ app.disable('x-powered-by'); // Nobody needs to know this is an express app
 /* Constants */
 app.set('Candidate', 'Candidate');
 
-app.use(logger('dev')); // Ise morgan to log requests to the console
+// create a write stream (in append mode)
+var logStream = fs.createWriteStream(__dirname + '/log.log', { flags: 'a' })
+app.use(logger('combined', { stream: logStream })); // Use morgan to log requests to the console
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
