@@ -6,7 +6,8 @@ var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
 exports.create = function(req, res, next){
   var dbClient = pgp(req.app.get('dbConnectionString')); // Create a client
 
-  if(req.body.user.user_type.toUpperCase() == req.app.get('Candidate').toUpperCase()){
+  if(req.body.user.user_type.toUpperCase() == req.app.get('CANDIDATE').toUpperCase()){
+    // TODO: Create stored procedures for these
     // Create a candidate profile
     var candidateQueryString = "INSERT INTO candidates(first_name, last_name, created_at, updated_at) values ($1, $2, $3, $4) returning id";
 
@@ -14,7 +15,7 @@ exports.create = function(req, res, next){
     var userQueryString = "INSERT INTO users (email, password, profile_id, profile_type, created_at, updated_at) values ($1, $2, $3, $4, $5, $6) returning id";
 
     dbClient.tx(function (t) {
-      date = moment().format();
+        date = moment().format();
         return t.one(candidateQueryString, [req.body.user.first_name, req.body.user.last_name, date, date])
           .then(function(data) {
              return t.one(userQueryString, [req.body.user.email, req.body.user.password, data.id, req.body.user.user_type, date, date]);

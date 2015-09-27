@@ -8,7 +8,7 @@ var faker = require('faker');
 describe('User Routes', function(){
   describe('authenticate', function(){
     it('should return a token when the user is authenticated', function(done){
-      var user = { auth: { username: 'f@g.com', password: 'password' } };
+      var user = { auth: { username: 'f@g.com', password: 'pafuncia' } };
       var expectedProfiletype = 'Candidate';
 
       supertest(app)
@@ -52,7 +52,7 @@ describe('User Routes', function(){
 
 
     it('should return a 500 if something goes really wrong', function(done){
-          var user = { auth: { username: 'f@g.com', password: 'password' } };
+          var user = { auth: { username: 'f@g.com', password: 'pafuncia' } };
 
           sinon.stub(jwt, 'sign', function(payload, secret, exp) {
             return null;

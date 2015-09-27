@@ -7,7 +7,7 @@ var token = '';
 describe('Candidates Routes', function(){
   beforeEach(function(done){
     // login and get a token
-    var user = { auth: { username: 'f@g.com', password: 'password' } };
+    var user = { auth: { username: 'f@g.com', password: 'pafuncia' } };
 
     supertest(app)
       .post('/v1/auth')
@@ -17,7 +17,6 @@ describe('Candidates Routes', function(){
       .expect(200)
       .end(function(err, res){
         if(err){
-          console.log(err);
           throw err;
         }
 
