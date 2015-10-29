@@ -51,6 +51,6 @@ exports.authenticate = function(req, res, next){
       }
     })
     .catch(function(error){
-          res.status(401).json({ error: 'Invalid username or password' });
+        res.status(401).json({ error: 'Invalid usernames or password' });
     });
 };
