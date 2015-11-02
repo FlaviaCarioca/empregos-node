@@ -19,7 +19,6 @@ describe('User Routes', function(){
         .expect(200)
         .end(function(err, res){
           if(err){
-            console.log(err);
             throw err;
           }
 
@@ -41,7 +40,6 @@ describe('User Routes', function(){
         .expect(401)
         .end(function(error, res){
           if(error){
-            console.log(error);
             throw error;
           }
 
@@ -66,7 +64,6 @@ describe('User Routes', function(){
             .expect(500)
             .end(function(error, res){
               if(error){
-                console.log(error);
                 throw error;
               }
 
@@ -89,7 +86,6 @@ describe('User Routes', function(){
         .expect(201)
         .end(function(error, res){
           if(error){
-            console.log(error);
             throw error;
           }
 

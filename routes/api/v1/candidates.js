@@ -22,7 +22,6 @@ exports.update = function(req, res, next){
                   res.status(200).end();
                 })
                 .catch(function(error){
-                  console.log(error);
                   res.status(422).json({ error: 'Something went wrong. Please try again later' });
                 });
 };

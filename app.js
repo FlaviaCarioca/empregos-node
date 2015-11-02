@@ -23,8 +23,8 @@ app.disable('x-powered-by'); // Nobody needs to know this is an express app
 app.set('CANDIDATE', 'Candidate');
 
 // create a write stream (in append mode)
-var logStream = fs.createWriteStream(__dirname + '/log.log', { flags: 'a' })
-app.use(logger('combined', { stream: logStream })); // Use morgan to log requests to the console
+//var logStream = fs.createWriteStream(__dirname + '/log.log', { flags: 'a' })
+app.use(logger('dev')); //, { stream: logStream })); // Use morgan to log requests to the console
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
