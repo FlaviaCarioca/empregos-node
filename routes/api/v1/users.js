@@ -12,6 +12,7 @@ exports.create = function(req, res, next){
     var candidateQueryString = "INSERT INTO candidates(first_name, last_name, created_at, updated_at) values ($1, $2, $3, $4) returning id";
 
     // Create a user
+    // TODO: Password needs to be hashed and salted before saving to db otherwise major security risk
     var userQueryString = "INSERT INTO users (email, password, profile_id, profile_type, created_at, updated_at) values ($1, $2, $3, $4, $5, $6) returning id";
 
     dbClient.tx(function (t) {
