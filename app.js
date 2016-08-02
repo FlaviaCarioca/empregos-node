@@ -28,7 +28,7 @@ app.use(logger('dev')); //, { stream: logStream })); // Use morgan to log reques
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-authVerification = auth.authVerification; // Used to secure routes. A json web tokenis required
+authVerification = auth.authVerification; // Used to secure routes. A json web token is required
 
 /* USER Routes */
 app.post('/v1/auth', users.authenticate);

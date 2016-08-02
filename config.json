@@ -1,11 +1,11 @@
 {
   "development":{
     "secret": "fbnmsRsdlgkai",
-    "database": "postgres://fgoncalves:password@localhost:5432/emprego_development"
+    "database": "postgres://flaviagoncalves:password@localhost:5432/emprego_development"
   },
   "test":{
     "secret": "sklfhslkhdkle",
-    "database": "postgres://fgoncalves:password@localhost:5432/emprego_test"
+    "database": "postgres://flaviagoncalves:password@localhost:5432/emprego_test"
   }
 
 }

@@ -39,19 +39,23 @@ exports.authenticate = function(req, res, next){
   var authQuery = "SELECT u.id, u.profile_type FROM users u WHERE email = $1 and password = $2";
   dbClient.query(authQuery, [req.body.auth.username, req.body.auth.password])
     .then(function(data){
-      payload = { user_id: data[0].id };
-
-      // Creates the token
-      var token = jwt.sign(payload, req.app.get('superSecret'), { expiresInMinutes: 1440 }); // expires in 24 hours
-
-      if(token){
-        // return the information including token as JSON
-        res.status(200).json({ auth_token: token, user_type: data[0].profile_type });
+      if(data.length == 0){
+          res.status(401).json({ error: 'Invalid username or password' });
       } else {
-        res.status(500).json({ 'error': 'Something went wrong. Please try again later' });
+          payload = {user_id: data[0].id};
+
+          // Creates the token
+          var token = jwt.sign(payload, req.app.get('superSecret'), {expiresInMinutes: 1440}); // expires in 24 hours
+
+          if (token) {
+              // return the information including token as JSON
+              res.status(200).json({auth_token: token, user_type: data[0].profile_type});
+          } else {
+              res.status(500).json({'error': 'Something went wrong. Please try again later'});
+          }
       }
     })
     .catch(function(error){
-        res.status(401).json({ error: 'Invalid usernames or password' });
+        res.status(401).json({ error: 'Invalid username or password' });
     });
 };
